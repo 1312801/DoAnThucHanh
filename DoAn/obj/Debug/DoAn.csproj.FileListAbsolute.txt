@@ -1,0 +1,16 @@
+D:\Project C#\DoAn\DoAn\bin\Debug\DoAn.exe.config
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.csprojResolveAssemblyReference.cache
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.Properties.Resources.resources
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.csproj.GenerateResource.Cache
+D:\Project C#\DoAn\DoAn\bin\Debug\DoAn.exe
+D:\Project C#\DoAn\DoAn\bin\Debug\DoAn.pdb
+D:\Project C#\DoAn\DoAn\bin\Debug\Microsoft.AnalysisServices.AdomdClient.dll
+D:\Project C#\DoAn\DoAn\bin\Debug\Microsoft.SqlServer.ManagedDTS.dll
+D:\Project C#\DoAn\DoAn\bin\Debug\Microsoft.SqlServer.DTSRuntimeWrap.dll
+D:\Project C#\DoAn\DoAn\bin\Debug\Microsoft.SqlServer.PipelineHost.dll
+D:\Project C#\DoAn\DoAn\bin\Debug\Microsoft.SqlServer.DTSPipelineWrap.dll
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.Form1.resources
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.Form2.resources
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.exe
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.pdb
+D:\Project C#\DoAn\DoAn\obj\Debug\DoAn.Form3.resources
