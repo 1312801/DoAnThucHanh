@@ -43,5 +43,13 @@ namespace DoAn
             Form3 form = new Form3(conn);
             form.Show();
         }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            AdomdConnection conn = new AdomdConnection(ConnectionString);
+            conn.Open();
+            Form3 form = new Form3(conn);
+            form.Show();
+        }
     }
 }

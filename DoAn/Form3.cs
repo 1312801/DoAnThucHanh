@@ -56,9 +56,9 @@ namespace DoAn
  (  
 [Measures].[Sales Amount] -   
 [Measures].[Total Product Cost]
-  ), FORMAT_STRING = '#,#.###'  " + "SELECT {[Measures].[Profit],[Measures].[Sales Amount]}  ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year].&[2013].Children  ON ROWS "
-+ " FROM[Adventure Works DW2012] "
-+ " WHERE[Dim Customer].[State Province Code].&[BY] &[DE]";
+  ), FORMAT_STRING = '#,#.###'  " + "SELECT {[Measures].[Profit],[Measures].[Sales Amount]} ON COLUMNS,([Order Date].[Calendar Year].&[2014],[Order Date].[Month Number Of Year].[Month Number Of Year]) ON ROWS"
++" FROM[Adventure Works DW2012]"
++" WHERE[Dim Customer].[State Province Code].&[BY] &[DE]";
             AdomdCommand cmd = con.CreateCommand();
             cmd.CommandText = query;
             AdomdDataAdapter ad = new AdomdDataAdapter(query, con);

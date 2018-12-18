@@ -13,17 +13,19 @@ namespace DoAn
 {
     public partial class Form2 : Form
     {
-        String CountryCode=null;
-        String RegionCode=null;
+        String CountryCode = null;
+        String RegionCode = null;
         String Nam = null;
-        AdomdConnection con1= new AdomdConnection();
+        String Query = null;
+        String member = null;
+        AdomdConnection con1 = new AdomdConnection();
         SqlConnection con2 = new SqlConnection();
         public Form2()
         {
             InitializeComponent();
-            
+
         }
-        public Form2(AdomdConnection conn,SqlConnection con)
+        public Form2(AdomdConnection conn, SqlConnection con)
         {
             this.con1 = conn;
             this.con2 = con;
@@ -32,14 +34,33 @@ namespace DoAn
             comboBox4.Hide();
             label2.Hide();
             FillNam();
-        } 
+        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedIndex = comboBox1.SelectedIndex;
-            if(selectedIndex==0)
+            String time = this.comboBox1.GetItemText(this.comboBox1.SelectedItem);
+            if (time == "Year")
             {
-                comboBox2.Show();
+                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]} "
+        + " ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year] ON ROWS "
+         + "FROM[Adventure Works DW2012] ";
+                member = "[Order Date].[Hierarchy].[Calendar Year].[MEMBER_CAPTION]";
+
+
+            }
+            if (time == "Quarter")
+            {
+                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]}"
+        + "ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year].&["+Nam+"].Children ON ROWS "
+         + " FROM[Adventure Works DW2012] ";
+                member = "[Order Date].[Hierarchy].[Calendar Quarter].[MEMBER_CAPTION]";
+            }
+            if (time == "Month")
+            {
+                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]} "
+       + "ON COLUMNS,([Order Date].[Calendar Year].&[" + Nam + "],[Order Date].[Month Number Of Year].[Month Number Of Year]) ON ROWS "
+        + " FROM[Adventure Works DW2012] ";
+                member = "[Order Date].[Month Number Of Year].[Month Number Of Year].[MEMBER_CAPTION]";
             }
         }
 
@@ -53,24 +74,23 @@ namespace DoAn
         {
 
             //SqlConnection sql = con.CreateCommand();
-            //query quarter
-            string query = @" WITH MEMBER [Measures].[Profit] AS  
+            //query theo quarter
+            String profit = @" WITH MEMBER [Measures].[Profit] AS  
    (  
         [Measures].[Sales Amount] -   
          [Measures].[Total Product Cost]
-  ), FORMAT_STRING = '#,#.###'  " + "SELECT {[Measures].[Profit],[Measures].[Sales Amount]}  ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year].&["+Nam+"].Children  ON ROWS "
-   + " FROM[Adventure Works DW2012] "
-   + " WHERE[Dim Customer].[State Province Code].&["+RegionCode+"] &["+CountryCode+"]";
+  ), FORMAT_STRING = '#,#.###'  ";
+   String condition= " WHERE[Dim Customer].[State Province Code].&["+RegionCode+"] &["+CountryCode+"]";
             AdomdCommand cmd = con1.CreateCommand();
-            cmd.CommandText = query;
-            AdomdDataAdapter ad = new AdomdDataAdapter(query, con1);
+            cmd.CommandText = profit + Query + condition;
+            AdomdDataAdapter ad = new AdomdDataAdapter(profit + Query+condition, con1);
             DataTable dt = new DataTable();
             ad.Fill(dt);
             chart1.DataSource = dt;
             chart1.ChartAreas["ChartArea1"].AxisX.Title = "Sales Amount";
             chart1.ChartAreas["ChartArea1"].AxisX.Title = "Date";
 
-            chart1.Series["Income"].XValueMember = "[Order Date].[Hierarchy].[Calendar Quarter].[MEMBER_CAPTION]";
+            chart1.Series["Income"].XValueMember =member;
             chart1.Series["Income"].YValueMembers = "[Measures].[Sales Amount]";
             chart1.Series["Profit"].YValueMembers = "[Measures].[Profit]";
         }
