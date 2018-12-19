@@ -41,26 +41,33 @@ namespace DoAn
             String time = this.comboBox1.GetItemText(this.comboBox1.SelectedItem);
             if (time == "Year")
             {
-                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]} "
+                Query = "SELECT {[Measures].[Profit],[Measures].[Income]} "
         + " ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year] ON ROWS "
          + "FROM[Adventure Works DW2012] ";
                 member = "[Order Date].[Hierarchy].[Calendar Year].[MEMBER_CAPTION]";
 
-
+                comboBox3.SelectedItem = null;
             }
             if (time == "Quarter")
             {
-                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]}"
+                Query = "SELECT {[Measures].[Profit],[Measures].[Income]}"
         + "ON COLUMNS,[Order Date].[Hierarchy].[Calendar Year].&["+Nam+"].Children ON ROWS "
          + " FROM[Adventure Works DW2012] ";
                 member = "[Order Date].[Hierarchy].[Calendar Quarter].[MEMBER_CAPTION]";
             }
             if (time == "Month")
             {
-                Query = "SELECT {[Measures].[Profit],[Measures].[Sales Amount]} "
+                Query = "SELECT {[Measures].[Profit],[Measures].[Income]} "
        + "ON COLUMNS,([Order Date].[Calendar Year].&[" + Nam + "],[Order Date].[Month Number Of Year].[Month Number Of Year]) ON ROWS "
         + " FROM[Adventure Works DW2012] ";
                 member = "[Order Date].[Month Number Of Year].[Month Number Of Year].[MEMBER_CAPTION]";
+            }
+            if (time == "Week")
+            {
+                Query = "SELECT {[Measures].[Profit],[Measures].[Income]} "
+       + "ON COLUMNS,([Order Date].[Calendar Year].&[" + Nam + "],[Order Date].[Week Number Of Year].[Week Number Of Year]) ON ROWS "
+        + " FROM[Adventure Works DW2012] ";
+                member = "[Order Date].[Week Number Of Year].[Week Number Of Year].[MEMBER_CAPTION]";
             }
         }
 
@@ -80,18 +87,20 @@ namespace DoAn
         [Measures].[Sales Amount] -   
          [Measures].[Total Product Cost]
   ), FORMAT_STRING = '#,#.###'  ";
+            String income = "MEMBER [Measures].[Income] AS ([Measures].[Sales Amount] -[Measures].[Tax Amt]) ,FORMAT_STRING = '#,#.###'  ";
+
    String condition= " WHERE[Dim Customer].[State Province Code].&["+RegionCode+"] &["+CountryCode+"]";
             AdomdCommand cmd = con1.CreateCommand();
             cmd.CommandText = profit + Query + condition;
-            AdomdDataAdapter ad = new AdomdDataAdapter(profit + Query+condition, con1);
+            AdomdDataAdapter ad = new AdomdDataAdapter(profit+income + Query+condition, con1);
             DataTable dt = new DataTable();
             ad.Fill(dt);
             chart1.DataSource = dt;
-            chart1.ChartAreas["ChartArea1"].AxisX.Title = "Sales Amount";
+            chart1.ChartAreas["ChartArea1"].AxisY.Title = "Money";
             chart1.ChartAreas["ChartArea1"].AxisX.Title = "Date";
 
             chart1.Series["Income"].XValueMember =member;
-            chart1.Series["Income"].YValueMembers = "[Measures].[Sales Amount]";
+            chart1.Series["Income"].YValueMembers = "[Measures].[Income]";
             chart1.Series["Profit"].YValueMembers = "[Measures].[Profit]";
         }
 
